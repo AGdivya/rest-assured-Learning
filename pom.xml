@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.AGdivya</groupId>
+    <artifactId>rest-assured-Learning</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <testng.version>7.9.0</testng.version>
+        <rest-assured.version>5.4.0</rest-assured.version>
+        <hamcrest-all.version>2.2</hamcrest-all.version>
+        <jackson-databind.version>2.15.2</jackson-databind.version>
+        <data-faker.version>2.1.0</data-faker.version>
+        <log4jcore.version>2.22.1</log4jcore.version>
+        <log4japi.version>2.22.1</log4japi.version>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <maven-enforcer.version>3.4.0</maven-enforcer.version>
+        <java-release.version>17</java-release.version>
+        <suite-xml>test-suite/testng.xml</suite-xml>
+    </properties>
+   <dependencies>
+       <!-- https://mvnrepository.com/artifact/org.testng/testng -->
+       <dependency>
+           <groupId>org.testng</groupId>
+           <artifactId>testng</artifactId>
+           <version>${testng.version}</version>
+           <scope>test</scope>
+       </dependency>
+
+       <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+       <dependency>
+           <groupId>io.rest-assured</groupId>
+           <artifactId>rest-assured</artifactId>
+           <version>${rest-assured.version}</version>
+           <scope>test</scope>
+       </dependency>
+
+       <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+       <dependency>
+           <groupId>com.fasterxml.jackson.core</groupId>
+           <artifactId>jackson-databind</artifactId>
+           <version>${jackson-databind.version}</version>
+       </dependency>
+
+       <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest -->
+       <dependency>
+           <groupId>org.hamcrest</groupId>
+           <artifactId>hamcrest</artifactId>
+           <version>${hamcrest-all.version}</version>
+           <scope>test</scope>
+       </dependency>
+
+       <!-- https://mvnrepository.com/artifact/net.datafaker/datafaker -->
+       <dependency>
+           <groupId>net.datafaker</groupId>
+           <artifactId>datafaker</artifactId>
+           <version>${data-faker.version}</version>
+       </dependency>
+
+       <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j -->
+       <dependency>
+           <groupId>org.apache.logging.log4j</groupId>
+           <artifactId>log4j-core</artifactId>
+           <version>${log4jcore.version}</version>
+       </dependency>
+
+       <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j -->
+       <dependency>
+           <groupId>org.apache.logging.log4j</groupId>
+           <artifactId>log4j-api</artifactId>
+           <version>${log4japi.version}</version>
+       </dependency>
+   </dependencies>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <release>${java-release.version}</release>
+                        <encoding>UTF-8</encoding>
+                        <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                    </configuration>
+                </plugin>
+                <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>${suite-xml}</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <argLine>-Dfile.encoding=UTF-8 -Xdebug -Xnoagent</argLine>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+                </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
