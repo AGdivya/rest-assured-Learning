@@ -1,6 +1,9 @@
 package io.github.AGdivya;
 
-import jdk.jfr.ContentType;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
@@ -40,22 +43,31 @@ public class RestfulBookerTest {
 
     }
 
+    private static RequestSpecification specBuilder()
+    {
+        final RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
+        requestSpecBuilder.setBaseUri("http://localhost:3001/")
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Cookie","token="+generateAuthToken())
+                .addFilter(new RequestLoggingFilter())
+                .addFilter(new ResponseLoggingFilter());
+
+        return requestSpecBuilder.build();
+
+    }
+
     //Create Booking
     @Test
     public void testCreateBooking() {
         final String firstname = "Divya";
         final UserData userdata = new UserData(firstname, "upadhyay", 430, true, new BookingDates("2018-01-01", "2019-01-01"), "Breakfast");
         given()
+                .spec(specBuilder())
                 .body(userdata)
-                .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
                 .when()
-                .log()
-                .all()
-                .post("http://localhost:3001/booking")
+                .post("booking")
                 .then()
-                .log()
-                .all()
                 .statusCode(200)
                 .body("bookingid", is(notNullValue()))
                 .body("booking.firstname", equalTo(firstname))
@@ -69,7 +81,7 @@ public class RestfulBookerTest {
                 .header("Content-Type", "application/json")
                 .when()
                 .log().all()
-                .get("http://localhost:3001/booking/5")
+                .get("http://localhost:3001/booking/11")
                 .then().log().all().statusCode(200);
 
     }
@@ -78,15 +90,11 @@ public class RestfulBookerTest {
     @Test
     public void testUpdateBooking() {
         final UpdateUserData updateUserData = new UpdateUserData("amit","Ag",340,true,new BookingDates("2018-01-31","2018-02-01"),"dinner");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Cookie","token="+generateAuthToken())
+        given().spec(specBuilder())
                 .body(updateUserData)
                 .when()
-                .log()
-                .all()
-                .put("http://localhost:3001/booking/5")
-                .then().log().all().body("firstname",equalTo("amit"))
+                .put("booking/11")
+                .then().body("firstname",equalTo("amit"))
                 .body("additionalneeds",equalTo("dinner"));
     }
 
@@ -96,19 +104,14 @@ public class RestfulBookerTest {
     {
         String additionalneeds = "lunch";
         final PartialUpdateUserData partialUpdateUserData = new PartialUpdateUserData(34,additionalneeds);
-        given()
-                .header("Content-Type","application/json" )
+        given().spec(specBuilder())
                 .header("Accept", "application/json")
-                .header("Cookie","token="+generateAuthToken())
                 .body(partialUpdateUserData)
                 .when()
-                .log()
-                .all()
-                .patch("http://localhost:3001/booking/5")
+                .patch("booking/11")
                 .then()
-                .log().all()
                 .statusCode(200)
-                .body(additionalneeds,is(notNullValue()))
+                .body("additionalneeds",is(notNullValue()))
                 .body("additionalneeds",is(equalTo(additionalneeds)));
 
     }
@@ -142,7 +145,7 @@ public class RestfulBookerTest {
     }
 
     //create token
-    public String generateAuthToken() {
+    public static String generateAuthToken() {
         final AuthData authdata = new AuthData("admin", "password123");
 
         return given()

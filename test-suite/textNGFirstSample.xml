@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Restful Booker Test Suite">
+    <test name="Restful Booker tests">
+        <classes>
+            <class name="io.github.AGdivya.RestfulBookerTest">
+                <methods>
+                    <include name="testCreateBooking"/>
+                    <include name="testUpdateBooking"/>
+                    <include name="generateAuthToken"/>
+                    <include name="testPartialUpdateBooking"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+<!--    <test name="Restful Booker JSON Schema Validation tests">-->
+<!--        <classes>-->
+<!--            <class name="com.restfulbooker.JsonSchemaValidationTest">-->
+<!--                <methods>-->
+<!--                    <include name="testCreateBookingJsonSchema"/>-->
+<!--                    <include name="testGetBookingJsonSchema"/>-->
+<!--                    <include name="testUpdateBookingJsonSchema"/>-->
+<!--                    <include name="testUpdatePartialBookingJsonSchema"/>-->
+<!--                    <include name="testCreateJsonSchema"/>-->
+<!--                </methods>-->
+<!--            </class>-->
+<!--        </classes>-->
+<!--    </test>-->
+</suite> <!-- Suite -->
